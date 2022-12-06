@@ -7,17 +7,20 @@ $board = @(foreach($line in $lines) {
 })
 
 function DisplayBoard {
-    param($og, $new)
-    Write-Output ""
-    Write-Output ('=' * ($og[0].Length + 2))
-    foreach($row in $og) {
+    $width = [int]($original_board[0].Length/2)
+    Write-Output (('=' * $width) + "OG" + ('='*($original_board[0].Length - $width)))
+    foreach($row in $original_board) {
         write-output "|$($row -join '')|"
     }
-    Write-Output ('=' * ($og[0].Length + 2))
+    Write-Output (('=' * $width) + "New" + ('='*($original_board[0].Length - $width -1)))
+    foreach($row in $board) {
+        write-output "|$($row -join '')|"
+    }
+    Write-Output ('=' * ($original_board[0].Length + 2))
 }
 
-DisplayBoard;
-$original_board = $board;
+$original_board = @()
+$original_board += $board;
 #process east moving
 for($y=0; $y -le $board.Length-1; $y++) {
     for($x=0; $x -le $board[$y].Length-1; $x++) {
@@ -45,8 +48,9 @@ for($y=0; $y -le $board.Length-1; $y++) {
 }
 
 DisplayBoard
-$original_board = $board;
 #process south moving
+$original_board = @()
+$original_board += $board;
 for($y=0; $y -le $board.Length-1; $y++) {   
     for($x=0; $x -le $board[$y].Length-1; $x++) {
         Write-Debug "Checking at [$y][$x] ($($original_board[$y][$x]))"

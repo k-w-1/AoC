@@ -85,23 +85,20 @@ class board {
             $this.board[$this.y_origin][$this.x_origin] = 'S'
             if($script:DebugPreference -ieq 'Continue') {
                 #
-                # AoC Fun storytime Ep 2:
+                # AoC: Adventures of Coding AoC - Ep 2:
                 #
-                # So, as you can see, IDGAF about code optimization, because as Greg pointed out (but I didn't 
-                # fully appreciate at the time), this /isn't/ code golf. Just answering, and quickly, is what
-                # matters. Anyway, the first prod data run I did, I actually thought it was infinite looping
-                # since it took *FOREVER* to run. I poked and prodded, and nil. Then I got to wonder, what if
-                # PS is like some other things and even if write-debug isn't going to stdout, perhaps it still
-                # runs the code anyway? I had a feeling RenderBoard() was expensive; PS seems to stutter when
-                # outputting swaths of text in my experience. Lo and behold; wrapping this in an explicit
-                # check to see if debug is on improved performance by at least an order of magnitude. I had
-                # even been running it until the rope hit an out-of-bounds error, then piping the board out to
-                # a text file, and using Notepad++ to zoom out and be able to visualize it and tweak the board
-                # size + origin to get the minimum board size (which definately was affecting the perf). After
-                # making this change (nb: I couldn't get the scope prefix ("script:") part just right to use
-                # whatever I had just manually entered into the console, so I just decided to hardcode it
-                # which made the script: scope work as intended) I was able to just make an arbitrarily large
-                # board, and it still was able to do the full 2k instructions in ~15s. Prior to the 'if', it
+                # So, as you can see, IDGAF about code optimization, because as my good friend Greg (https://github.com/G-regL/AdventOfCode)
+                # pointed out (but I didn't fully appreciate at the time), this /isn't/ code golf. Just answering, and quickly, is what
+                # matters. Anyway, the first prod data run I did, I actually thought it was infinite looping since it took *FOREVER* to
+                # run. I poked and prodded, and nil. Then I got to wonder, what if PS is like some other things and even if write-debug 
+                # isn't going to stdout, perhaps it still runs the code anyway? I had a feeling RenderBoard() was expensive; PS seems to 
+                # stutter when outputting swaths of text in my experience. Lo and behold; wrapping this in an explicit check to see if
+                # debug is on improved performance by at least an order of magnitude. I had even been running it until the rope hit an
+                # out-of-bounds error, then piping the board out to a text file, and using Notepad++ to zoom out and be able to visualize 
+                # it and tweak the board size + origin to get the minimum board size (which definately was affecting the perf). After
+                # making this change (nb: I couldn't get the scope prefix ("script:") part just right to use whatever I had just manually 
+                # entered into the console, so I just decided to hardcode it which made the script: scope work as intended) I was able to
+                # just make an arbitrarily large board, and it still was able to do the full 2k instructions in ~15s. Prior to the 'if', it
                 # was taking >100s!
                 #
                 # tl;dr: Warning: write-debug does stuff even when you're not debugging!

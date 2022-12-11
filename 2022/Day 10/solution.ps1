@@ -8,11 +8,13 @@ $X = 1
 $program_step = $sum = $pending_instructions = 0
 $display = @( , ' ' * 40*6)
 
-foreach($cycle in 1..241) {
+foreach($cycle in 1..240) {
     #draw screen
-    if(($cycle % 40) -in ($X-1)..($X+1)) {
+    if((($cycle % 40)-1) -in ($X-1)..($X+1)) {
+        Write-Debug ("C:{0,3} X:{1,4} - X is +/-1 of cycle%40 ({2}), drawing lit pixel at" -F $cycle, $X, (($cycle % 40)-1))
         $display[$cycle-1] = '#'
     } else {
+        Write-Debug ("C:{0,3} X:{1,4} - X is NOT +/-1 of cycle%40 ({2}), drawing not lit pixel" -F $cycle, $X, (($cycle % 40)-1))
         $display[$cycle-1] = '.'
     }
     
@@ -35,6 +37,7 @@ foreach($cycle in 1..241) {
         'add2' {
             $X += [int]$instruction[1]
             Write-Debug ("C:{0,3} X:{1,4} - Processing add2." -F $cycle, $X)
+            Write-Debug ("Sprite position: " + ('.'*($x-1)) + '###' + ('.'*(38-$x)))
         }
         'addx' {
             Write-Debug ("C:{0,3} X:{1,4} - Processing addx." -F $cycle, $X)

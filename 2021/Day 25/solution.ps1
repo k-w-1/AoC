@@ -1,39 +1,38 @@
 $lines = Get-Content .\test_input.txt
 
-$board = ,@() * $lines.size
-
 $board = @(foreach($line in $lines) {
     [Collections.ArrayList]@(,$line.ToCharArray())
 })
 
 function DisplayBoard {
     $width = [int]($original_board[0].Length/2)
-    Write-Output (('=' * $width) + "OG" + ('='*($original_board[0].Length - $width)))
-    foreach($row in $original_board) {
-        write-output "|$($row -join '')|"
+    Write-Output (('=' * $width) + "OG" + ('='*($original_board[0].Length - $width))+('=' * $width) + "New" + ('='*($original_board[0].Length - $width -1)))
+    for($x=0; $x -lt $board.Length; $x++) {
+        write-output "|$($original_board[$x] -join '')||$($board[$x] -join '')|"
     }
-    Write-Output (('=' * $width) + "New" + ('='*($original_board[0].Length - $width -1)))
-    foreach($row in $board) {
-        write-output "|$($row -join '')|"
-    }
-    Write-Output ('=' * ($original_board[0].Length + 2))
+    Write-Output ('=' * ($original_board[0].Length * 2 + 4))
 }
 
 $original_board = @()
-$original_board += $board;
+$original_board += @(,$board);
+DisplayBoard
 #process east moving
 for($y=0; $y -le $board.Length-1; $y++) {
+    Write-Debug ("Looking at row $y :" + ($board[$y] -join ''))
+    Write-Debug ("                  " + (@(0..($board[$y].Length-1)) -join ''))
     for($x=0; $x -le $board[$y].Length-1; $x++) {
-        Write-Debug "Checking at [$y][$x] ($($original_board[$y][$x]))"
+        #Write-Debug "Checking at [$y][$x] ($($original_board[$y][$x]))"
         if($original_board[$y][$x] -eq '>') {
             if($x -eq $original_board[$y].Length-1) { #look around the corner
-                Write-Debug "Looking ardound the edge [$y][0] ($($original_board[$y][0]))"
+                #Write-Debug "Looking ardound the edge [$y][0] ($($original_board[$y][0]))"
                 if($original_board[$y][0] -eq '.') { #free space
                     Write-Debug "Moving [$y][$x]($($original_board[$y][$x])) to [$y][0]($($original_board[$y][0]))"
                     $board[$y][$x] = '.'
                     $board[$y][0] = '>'
+                } else {
+                    Write-Debug "Not moving [$y][$x]($($original_board[$y][$x])) because [$y][0]($($original_board[$y][0]))"
                 }
-            } else {
+            } else {   
                 if($original_board[$y][$x+1] -eq '.') { #free space
                     Write-Debug "Moving [$y][$x]($($original_board[$y][$x])) to [$y][$($x+1)]($($original_board[$y][$x+1]))"
                     $board[$y][$x] = '.'
@@ -45,6 +44,8 @@ for($y=0; $y -le $board.Length-1; $y++) {
             }
         }
     }
+    Write-Debug ("Row $y was        :" + ($original_board[$y] -join ''))
+    Write-Debug ("Row $y is now     :" + ($board[$y] -join ''))
 }
 
 DisplayBoard
